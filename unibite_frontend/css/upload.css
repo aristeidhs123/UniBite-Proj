@@ -1,0 +1,147 @@
+/* upload.css - UniBite upload page styling */
+
+body[data-page="upload"] {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Top header */
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.header-btn {
+    background: #ffffff;
+    border: 1px solid #7c7c8f;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    text-decoration: none;
+    color: inherit;
+}
+
+/* Page title */
+.profile-title {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+/* Wrapper */
+.profile-wrapper.upload-wrapper {
+    background: transparent;
+    margin: 0 auto;
+    text-align: left;
+}
+
+/* Form */
+.upload-form {
+    background: #fff;
+    padding: 18px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.form-label {
+    display: block;
+    margin: 10px 0 6px 0;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.form-input, .form-textarea, .form-select, .form-file {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+    font-size: 14px;
+    background: #fff;
+}
+
+.form-textarea {
+    min-height: 90px;
+    resize: vertical;
+}
+
+.image-preview-wrap {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.image-preview {
+    max-width: 220px;
+    border-radius: 8px;
+    border: 1px solid #eee;
+}
+
+/* Actions */
+.form-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 14px;
+    justify-content: flex-end;
+}
+
+.upload-submit {
+    background: #ff6b6b;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.upload-submit:hover {
+    background: #e85a5a;
+}
+
+.cancel-btn {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 10px 14px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+    .container {
+        padding: 14px;
+    }
+
+    .profile-title {
+        font-size: 24px;
+    }
+
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+    .upload-submit, .cancel-btn {
+        width: 100%;
+    }
+}

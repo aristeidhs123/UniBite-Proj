@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UniBite</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body data-page="feed">
+
+<div class="container">
+
+    <header class="top-header">
+
+        <h1 class="logo">UniBite</h1>
+
+        <div class="top-right">
+
+            <button id="profile-btn"
+            class="header-btn profile-link">
+                Profile
+            </button>
+
+            <button class="header-btn"
+            id="messages-btn">
+                Messages
+            </button>
+
+            <button id="logout-btn"
+            class="header-btn">
+                Logout
+            </button>
+
+            <button class="upload-icon">
+                +
+            </button>
+
+        </div>
+
+    </header>
+
+    <input
+        type="text"
+        id="search"
+        placeholder="Search for meal or cook..."
+    >
+
+    <div class="categories">
+
+        <button class="category-btn">
+            Breakfast
+        </button>
+
+        <button class="category-btn">
+            Lunch
+        </button>
+
+        <button class="category-btn">
+            Dinner
+        </button>
+
+        <button class="category-btn">
+            Dessert
+        </button>
+
+    </div>
+
+    <div id="feed"></div>
+
+</div>
+
+<script src="../js/main.js"></script>
+<script src="../js/feed.js"></script>
+<script src="../js/profile.js"></script>
+<script src="../js/upload.js"></script>
+<script src="../js/requests.js"></script>
+<script src="../js/login.js"></script>
+
+</body>
+</html>

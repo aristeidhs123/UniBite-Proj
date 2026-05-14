@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload Meal - UniBite</title>
+    <link rel="stylesheet" href="../css/upload.css">
+</head>
+
+<body data-page="upload">
+
+<div class="container">
+
+    <header class="top-header">
+        <h1 class="logo">UniBite</h1>
+        <div class="top-right">
+            <a href="index.html" class="header-btn">Back</a>
+        </div>
+    </header>
+
+    <h2 class="profile-title">Upload Meal</h2>
+
+    <div class="profile-wrapper upload-wrapper">
+
+        <form id="upload-form" class="upload-form">
+
+            <label class="form-label">Meal Title</label>
+            <input type="text" id="meal-title" class="form-input" placeholder="e.g. Homemade Moussaka">
+
+            <label class="form-label">Description</label>
+            <textarea id="meal-desc" class="form-textarea" placeholder="Short description..."></textarea>
+
+            <label class="form-label">Category</label>
+            <select id="meal-category" class="form-select">
+                <option>Breakfast</option>
+                <option>Lunch</option>
+                <option>Dinner</option>
+                <option>Dessert</option>
+            </select>
+
+            <label class="form-label">Image</label>
+            <input type="file" id="meal-image" accept="image/*" class="form-file">
+            <div class="image-preview-wrap">
+                <img id="image-preview" alt="Preview" class="image-preview" style="display:none;">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="request-btn upload-submit">Upload</button>
+                <a href="profile.html" class="header-btn cancel-btn">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script src="../js/main.js"></script>
+<script src="../js/upload.js"></script>
+
+</body>
+</html>

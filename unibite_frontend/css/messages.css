@@ -1,0 +1,165 @@
+/* ../css/messages.css
+   UniBite messages styling (matches profile/requests look)
+*/
+
+body[data-page="messages"] {
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.header-btn {
+    background: #ffffff;
+    border: 1px solid #7c7c8f;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 15px;
+    text-decoration: none;
+    color: inherit;
+}
+
+.profile-title {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.requests-wrapper, .messages-wrapper {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.request-box, .message-box {
+    background: #fff;
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    text-align: left;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+
+#messages-list {
+    margin-top: 10px;
+}
+
+/* Message item */
+.message-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 10px;
+    border-radius: 8px;
+    background: #ffffff;
+    margin-bottom: 10px;
+    border: 1px solid #eee;
+    cursor: pointer;
+    transition: transform 0.06s ease;
+}
+
+.message-item:hover {
+    transform: translateY(-2px);
+}
+
+/* Avatar placeholder */
+.message-avatar {
+    width: 44px;
+    height: 44px;
+    background: #ddd;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* Content */
+.message-content {
+    flex: 1;
+}
+
+.message-sender {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.message-sender strong {
+    font-size: 15px;
+}
+
+.message-meta {
+    font-size: 12px;
+    color: #777;
+}
+
+.message-text {
+    font-size: 14px;
+    color: #222;
+    line-height: 1.35;
+}
+
+/* Actions */
+.message-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.msg-btn {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #333;
+}
+
+/* Unread highlight */
+.message-item.unread {
+    border-left: 4px solid #ff6b6b;
+    background: linear-gradient(90deg, #fff 0%, #fffaf6 100%);
+}
+
+/* Responsive */
+@media (max-width: 520px) {
+    .container {
+        padding: 14px;
+    }
+
+    .logo {
+        font-size: 22px;
+    }
+
+    .profile-title {
+        font-size: 24px;
+    }
+
+    .message-avatar {
+        width: 40px;
+        height: 40px;
+    }
+}

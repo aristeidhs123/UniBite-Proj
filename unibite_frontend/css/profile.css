@@ -1,0 +1,60 @@
+/* --- PROFILE PAGE --- */
+
+.profile-header {
+    display: flex;
+    justify-content: flex-start; /* UniBite stays left */
+    align-items: center;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 0;
+}
+
+/* Centered "Profile" title */
+.profile-title {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* Wrapper for all profile content */
+.profile-wrapper {
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+}
+
+/* Avatar + info layout */
+.profile-top {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 25px;
+    margin-bottom: 25px;
+}
+
+.profile-info {
+    text-align: left;
+}
+
+.profile-avatar {
+    width: 90px;
+    height: 90px;
+    background: #ddd;
+    border-radius: 50%;
+}
+
+/* Details + Listings boxes */
+.details-box, #profile-listings {
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+
