@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <!-- Page: Meal upload / edit form -->
+    <meta charset="UTF-8">
+    <title>Upload Meal - UniBite</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/profile.css">
+    <link rel="stylesheet" href="../css/upload.css">
+</head>
+
+<body data-page="upload">
+
+<div class="container">
+
+    <header class="top-header">
+        <h1 class="logo">UniBite</h1>
+        <div class="top-right">
+            <button id="feed-menu-toggle" class="menu-toggle-btn" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div id="feed-menu-drawer" class="feed-menu-drawer">
+                <button class="header-btn drawer-btn" data-action="feed">Feed</button>
+                <button class="header-btn drawer-btn" data-action="profile">Profile</button>
+                <button class="header-btn drawer-btn" data-action="notifications">Notifications</button>
+                <button class="header-btn drawer-btn" data-action="upload">Upload</button>
+                <button class="header-btn drawer-btn" data-action="login">Login / Sign up</button>
+                <button class="header-btn drawer-btn" data-action="logout">Logout</button>
+                <button class="header-btn drawer-btn" data-action="admin" style="display:none;">Admin</button>
+            </div>
+        </div>
+    </header>
+
+    <h2 class="profile-title">Upload Meal</h2>
+
+    <!-- Meal upload form: create or edit a listing with details and image -->
+    <div class="profile-wrapper upload-wrapper">
+
+        <form id="upload-form" class="upload-form">
+
+            <label class="form-label">Meal Title</label>
+            <input type="text" id="meal-title" class="form-input" placeholder="e.g. Homemade Moussaka" required>
+
+            <label class="form-label">Description</label>
+            <textarea id="meal-desc" class="form-textarea" placeholder="Short description..." required></textarea>
+
+            <label class="form-label">Category</label>
+            <select id="meal-category" class="form-select">
+                <option>Breakfast</option>
+                <option>Lunch</option>
+                <option>Dinner</option>
+                <option>Dessert</option>
+            </select>
+
+            <label class="form-label">Portions</label>
+            <input type="number" id="meal-quantity" class="form-input" min="1" value="1" required>
+
+            <label class="form-label">Pickup Location</label>
+            <input type="text" id="meal-location" class="form-input" placeholder="e.g. Dorm 12, Hall C" required>
+
+            <label class="form-label">Pickup Time</label>
+            <input type="text" id="meal-time" class="form-input" placeholder="e.g. 18:30" required>
+
+            <label class="form-label">Allergens (optional)</label>
+            <select id="meal-allergens" class="form-select">
+                <option value="">Select allergens...</option>
+                <option value="dairy">Dairy</option>
+                <option value="nuts">Nuts</option>
+                <option value="gluten">Gluten</option>
+                <option value="soy">Soy</option>
+                <option value="shellfish">Shellfish</option>
+                <option value="eggs">Eggs</option>
+                <option value="fish">Fish</option>
+                <option value="sesame">Sesame</option>
+                <option value="other">Other</option>
+            </select>
+            <textarea id="meal-allergens-other" class="form-textarea" placeholder="Specify other allergens..." style="display:none;"></textarea>
+
+            <label class="form-label">Image</label>
+            <input type="file" id="meal-image" accept="image/*" class="form-file">
+            <div class="image-preview-wrap">
+                <img id="image-preview" alt="Preview" class="image-preview" style="display:none;">
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="request-btn upload-submit">Upload</button>
+                <a href="profile.html" class="header-btn cancel-btn">Cancel</a>
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+<script src="../js/main.js"></script>
+<script src="../js/upload.js"></script>
+
+</body>
+</html>

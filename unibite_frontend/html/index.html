@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Page: Feed with meal search, category filters, distance filters, and map -->
+    <meta charset="UTF-8">
+    <title>UniBite</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+
+<body data-page="feed">
+
+<div class="container">
+
+    <header class="top-header">
+
+        <h1 class="logo">UniBite</h1>
+
+        <div class="top-right">
+
+            <button id="feed-menu-toggle" class="menu-toggle-btn" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div id="feed-menu-drawer" class="feed-menu-drawer">
+                <button class="header-btn drawer-btn" data-action="feed">Feed</button>
+                <button class="header-btn drawer-btn" data-action="profile">Profile</button>
+                <button class="header-btn drawer-btn" data-action="notifications">Notifications</button>
+                <button class="header-btn drawer-btn" data-action="upload">Upload</button>
+                <button class="header-btn drawer-btn" data-action="login">Login / Sign up</button>
+                <button class="header-btn drawer-btn" data-action="logout">Logout</button>
+                <button class="header-btn drawer-btn" data-action="admin" style="display:none;">Admin</button>
+            </div>
+
+        </div>
+
+    </header>
+
+    <!-- Search bar: lets users type a query to look for meal titles, cooks, or locations -->
+    <input
+        type="text"
+        id="search"
+        placeholder="Search for meal or cook..."
+    >
+
+    <!-- Category buttons allow quick filtering by meal type -->
+    <div class="categories">
+
+        <button class="category-btn">
+            All
+        </button>
+
+        <button class="category-btn">            Breakfast
+        </button>
+
+        <button class="category-btn">
+            Lunch
+        </button>
+
+        <button class="category-btn">
+            Dinner
+        </button>
+
+        <button class="category-btn">
+            Dessert
+        </button>
+
+    </div>
+
+    <!-- Additional filters for allergens and ingredients/cuisines -->
+    <div class="extra-filters">
+        <select id="allergen-filter" class="sort-select">
+            <option value="">All Allergens</option>
+        </select>
+        <select id="ingredient-filter" class="sort-select">
+            <option value="">All Ingredients / Cuisines</option>
+        </select>
+    </div>
+
+    <!-- Map panel shows where meal pickups are located and updates markers -->
+    <div class="map-panel">
+        <div class="map-controls">
+            <button id="locate-btn" class="map-control-button">Use my location</button>
+            <select id="sort-select" class="sort-select">
+                <option value="newest">Sort: Newest</option>
+                <option value="distance">Sort: Nearest</option>
+            </select>
+            <select id="distance-filter" class="sort-select">
+                <option value="">Distance: Any</option>
+                <option value="2">Within 2 km</option>
+                <option value="5">Within 5 km</option>
+                <option value="10">Within 10 km</option>
+            </select>
+            <span id="location-label" class="location-label">Campus center</span>
+        </div>
+        <div class="map-toggle-panel">
+            <button id="enable-map-btn" class="map-control-button map-toggle-btn active">Map enabled</button>
+            <button id="disable-map-btn" class="map-control-button map-toggle-btn">Map disabled</button>
+        </div>
+        <div id="feed-map" class="feed-map"></div>
+    </div>
+
+    <div id="feed"></div>
+
+</div>
+
+<script src="../js/main.js"></script>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="../js/feed.js"></script>
+<script src="../js/profile.js"></script>
+<script src="../js/upload.js"></script>
+<script src="../js/requests.js"></script>
+<script src="../js/ratings.js"></script>
+<script src="../js/login.js"></script>
+
+</body>
+</html>
