@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <!-- Page: Requests page for the current cook to approve or reject orders -->
     <meta charset="UTF-8">
-    <title>Requests</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Requests - UniBite</title>
+    <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/requests.css">
 </head>
 
@@ -10,11 +13,29 @@
 
 <div class="container">
 
-    <header>
-        <h1>Requests</h1>
-        <a href="index.html">Back</a>
+    <header class="top-header">
+        <h1 class="logo">UniBite</h1>
+        <div class="top-right">
+            <button id="feed-menu-toggle" class="menu-toggle-btn" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div id="feed-menu-drawer" class="feed-menu-drawer">
+                <button class="header-btn drawer-btn" data-action="feed">Feed</button>
+                <button class="header-btn drawer-btn" data-action="profile">Profile</button>
+                <button class="header-btn drawer-btn" data-action="notifications">Notifications</button>
+                <button class="header-btn drawer-btn" data-action="upload">Upload</button>
+                <button class="header-btn drawer-btn" data-action="login">Login / Sign up</button>
+                <button class="header-btn drawer-btn" data-action="logout">Logout</button>
+                <button class="header-btn drawer-btn" data-action="admin" style="display:none;">Admin</button>
+            </div>
+        </div>
     </header>
 
+    <h2 style="text-align:center;margin:20px 0 30px 0;">Pending Requests</h2>
+
+    <!-- List of request cards for the cook to review -->
     <div id="requests-list"></div>
 
 </div>

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
+    <!-- Page: User messages inbox with simple list and read/delete actions -->
     <meta charset="UTF-8">
     <title>Messages - UniBite</title>
     <link rel="stylesheet" href="../css/messages.css">
@@ -16,15 +17,21 @@
 
         <div class="top-right">
 
-            <button id="logout-btn"
-            class="header-btn">
-                Logout
+            <button id="feed-menu-toggle" class="menu-toggle-btn" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
             </button>
 
-            <a href="index.html"
-            class="header-btn">
-                Back
-            </a>
+            <div id="feed-menu-drawer" class="feed-menu-drawer">
+                <button class="header-btn drawer-btn" data-action="feed">Feed</button>
+                <button class="header-btn drawer-btn" data-action="profile">Profile</button>
+                <button class="header-btn drawer-btn" data-action="notifications">Notifications</button>
+                <button class="header-btn drawer-btn" data-action="upload">Upload</button>
+                <button class="header-btn drawer-btn" data-action="login">Login / Sign up</button>
+                <button class="header-btn drawer-btn" data-action="logout">Logout</button>
+                <button class="header-btn drawer-btn" data-action="admin" style="display:none;">Admin</button>
+            </div>
 
         </div>
 
@@ -32,6 +39,7 @@
 
     <h2 class="profile-title">Messages</h2>
 
+    <!-- Container for the list of messages addressed to the current user -->
     <div id="messages-list"
     class="requests-wrapper"></div>
 
@@ -39,6 +47,7 @@
 
 <script src="../js/main.js"></script>
 <script src="../js/messages.js"></script>
+<script src="../js/ratings.js"></script>
 
 </body>
 </html>

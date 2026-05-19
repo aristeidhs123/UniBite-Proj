@@ -73,10 +73,27 @@
     font-size: 14px;
 }
 
-.approve-btn:hover {
-    background: #43a047;
+.delivered-btn {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
 }
 
-.reject-btn:hover {
-    background: #d84333;
+.delivered-btn:hover {
+    background: #1976D2;
+}
+
+.request-box p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.request-box h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: 600;
 }

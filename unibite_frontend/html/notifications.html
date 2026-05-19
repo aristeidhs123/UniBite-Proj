@@ -1,15 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!-- Page: Single request detail view  -->
+    <!-- Page: Notifications page with request and message tabs -->
     <meta charset="UTF-8">
-    <title>Request Details - UniBite</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - UniBite</title>
     <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/notifications.css">
 </head>
 
-<body data-page="request">
+<body data-page="notifications">
 
 <div class="container">
+
     <header class="top-header">
         <h1 class="logo">UniBite</h1>
         <div class="top-right">
@@ -30,12 +33,27 @@
         </div>
     </header>
 
-    <!-- Request detail view renders the notification request content -->
-    <div id="request-detail"></div>
+    <div class="notifications-layout">
+        <div class="notifications-sidebar">
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab="requests">Requests</button>
+                <button class="tab-btn" data-tab="messages">Messages</button>
+            </div>
+            <div id="requests-list" class="tab-panel"></div>
+            <div id="messages-list" class="tab-panel" style="display:none;"></div>
+        </div>
+        <div class="listing-detail">
+            <!-- Detail panel shows selected request or message content -->
+            <div id="detail-content"></div>
+        </div>
+    </div>
+
 </div>
 
 <script src="../js/main.js"></script>
 <script src="../js/requests.js"></script>
+<script src="../js/notifications.js"></script>
+<script src="../js/ratings.js"></script>
 
 </body>
 </html>

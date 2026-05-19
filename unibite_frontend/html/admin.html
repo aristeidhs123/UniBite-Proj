@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <!-- Page: Admin dashboard showing statistics, leaderboards, and activity -->
+    <meta charset="UTF-8">
+    <title>Admin Dashboard - UniBite</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/admin.css">
+</head>
+
+<body data-page="admin">
+
+<div class="container">
+
+    <header class="top-header">
+        <h1 class="logo">UniBite - Admin Dashboard</h1>
+        <div class="top-right">
+            <button id="feed-menu-toggle" class="menu-toggle-btn" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div id="feed-menu-drawer" class="feed-menu-drawer">
+                <button class="header-btn drawer-btn" data-action="feed">Feed</button>
+                <button class="header-btn drawer-btn" data-action="profile">Profile</button>
+                <button class="header-btn drawer-btn" data-action="notifications">Notifications</button>
+                <button class="header-btn drawer-btn" data-action="upload">Upload</button>
+                <button class="header-btn drawer-btn" data-action="login">Login / Sign up</button>
+                <button class="header-btn drawer-btn" data-action="logout">Logout</button>
+                <button class="header-btn drawer-btn" data-action="admin" style="display:none;">Admin</button>
+            </div>
+            <!-- logout handled via drawer -->
+        </div>
+    </header>
+
+    <div class="admin-content">
+        
+        <!-- Statistics section: shows counts and averages for admin review -->
+        <section class="admin-section">
+            <h2>📊 Statistics Overview</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Portions Distributed</h3>
+                    <p class="stat-number" id="total-portions">0</p>
+                    <p class="stat-label">Last 30 days</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Users</h3>
+                    <p class="stat-number" id="total-users">0</p>
+                    <p class="stat-label">Active on platform</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Average Rating</h3>
+                    <p class="stat-number" id="avg-rating">0.0</p>
+                    <p class="stat-label">Out of 5.0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Total Meals Posted</h3>
+                    <p class="stat-number" id="total-meals">0</p>
+                    <p class="stat-label">All time</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Requests</h3>
+                    <p class="stat-number" id="pending-requests">0</p>
+                    <p class="stat-label">Awaiting cook response</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Unrated Deliveries</h3>
+                    <p class="stat-number" id="unrated-deliveries">0</p>
+                    <p class="stat-label">Need consumer feedback</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Top Donors / Leaderboard -->
+        <section class="admin-section">
+            <h2>🏆 Top Donors Leaderboard</h2>
+            <div class="leaderboard">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Username</th>
+                            <th>Portions Given</th>
+                            <th>Points</th>
+                            <th>Avg Rating</th>
+                        </tr>
+                    </thead>
+                    <tbody id="leaderboard-body">
+                        <tr>
+                            <td colspan="5" style="text-align:center;padding:20px;color:#999;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Top Rated Meals -->
+        <section class="admin-section">
+            <h2>⭐ Top Rated Meals</h2>
+            <div class="top-meals">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Rank</th>
+                            <th>Meal Title</th>
+                            <th>Cook</th>
+                            <th>Average Rating</th>
+                            <th>Ratings Count</th>
+                        </tr>
+                    </thead>
+                    <tbody id="top-meals-body">
+                        <tr>
+                            <td colspan="5" style="text-align:center;padding:20px;color:#999;">Loading...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Recent Activity -->
+        <section class="admin-section">
+            <h2>📋 Recent Activity</h2>
+            <div class="recent-activity">
+                <div id="recent-activity-list">
+                    <p style="text-align:center;color:#999;padding:20px;">Loading...</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+</div>
+
+<script src="../js/main.js"></script>
+<script src="../js/admin.js"></script>
+
+</body>
+</html>

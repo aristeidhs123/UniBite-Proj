@@ -2,40 +2,9 @@
 
 body[data-page="upload"] {
     font-family: Arial, sans-serif;
-    background: #f4f4f4;
+    background: #fcb674;
     margin: 0;
     padding: 0;
-}
-
-.container {
-    max-width: 500px;
-    margin: 0 auto;
-    padding: 20px;
-}
-
-/* Top header */
-.top-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.logo {
-    font-size: 26px;
-    font-weight: bold;
-    margin: 0;
-}
-
-.header-btn {
-    background: #ffffff;
-    border: 1px solid #7c7c8f;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 15px;
-    text-decoration: none;
-    color: inherit;
 }
 
 /* Page title */
@@ -49,9 +18,14 @@ body[data-page="upload"] {
 
 /* Wrapper */
 .profile-wrapper.upload-wrapper {
-    background: transparent;
-    margin: 0 auto;
+    max-width: 840px;
+    margin: 30px auto 0;
     text-align: left;
+    background: #ffffff;
+    padding: 30px 32px 40px;
+    border-radius: 16px;
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 -12px 30px rgba(41, 41, 41, 0.08), 0 30px 80px rgba(0, 0, 0, 0.22), 0 8px 20px rgba(0,0,0,0.10);
 }
 
 /* Form */
@@ -63,26 +37,49 @@ body[data-page="upload"] {
 }
 
 .form-label {
-    display: block;
-    margin: 10px 0 6px 0;
+    display: inline-block;
+    margin-right: 12px;
+    margin-bottom: 8px;
     font-weight: 600;
     font-size: 14px;
+    min-width: 140px;
+    text-align: left;
+    vertical-align: top;
 }
 
 .form-input, .form-textarea, .form-select, .form-file {
-    width: 100%;
+    display: inline-block;
+    width: calc(100% - 160px);
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid #cccccc;
     box-sizing: border-box;
     font-size: 14px;
-    background: #fff;
+    background: #ffffff;
+    margin-bottom: 8px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-select:hover,
+.form-select:focus {
+    border-color: #000;
+    box-shadow: 0 0 0 2px rgba(0,0,0,0.06);
+    outline: none;
 }
 
 .form-textarea {
     min-height: 90px;
     resize: vertical;
 }
+
+/* Make 'Other allergens' textarea inline-block like other form inputs */
+#meal-allergens-other {
+    display: none;
+    width: calc(100% - 160px) !important;
+    min-height: 50px;
+    vertical-align: top;
+}
+
 
 .image-preview-wrap {
     margin-top: 10px;
@@ -104,7 +101,7 @@ body[data-page="upload"] {
 }
 
 .upload-submit {
-    background: #ff6b6b;
+    background: #349e54;
     color: white;
     border: none;
     padding: 10px 14px;
@@ -114,7 +111,7 @@ body[data-page="upload"] {
 }
 
 .upload-submit:hover {
-    background: #e85a5a;
+    background: #2d8345;
 }
 
 .cancel-btn {
@@ -134,6 +131,23 @@ body[data-page="upload"] {
 
     .profile-title {
         font-size: 24px;
+    }
+
+    .form-label {
+        display: block;
+        margin: 10px 0 6px 0;
+        min-width: auto;
+        margin-right: 0;
+    }
+
+    .form-input, .form-textarea, .form-select, .form-file {
+        display: block;
+        width: 100%;
+        margin-bottom: 8px;
+    }
+
+    #meal-allergens-other {
+        width: 100% !important;
     }
 
     .form-actions {

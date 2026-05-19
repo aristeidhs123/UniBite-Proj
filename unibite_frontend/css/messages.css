@@ -12,7 +12,7 @@ body[data-page="messages"] {
 .container {
     max-width: 500px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 0 20px 20px;
 }
 
 .top-header {
@@ -23,7 +23,7 @@ body[data-page="messages"] {
 }
 
 .logo {
-    font-size: 26px;
+    font-size: 38px;
     font-weight: bold;
     margin: 0;
 }
@@ -37,6 +37,21 @@ body[data-page="messages"] {
     font-size: 15px;
     text-decoration: none;
     color: inherit;
+    transition: background 0.2s, color 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.header-btn:hover,
+.header-btn:focus {
+    background: #f0f0f0;
+    color: #000;
+    border-color: #000;
+    transform: scale(1.05);
+}
+
+.header-btn:active {
+    transform: scale(1.0);
+    background: #e0e0e0;
+    color: #000;
 }
 
 .profile-title {

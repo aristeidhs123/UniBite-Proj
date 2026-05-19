@@ -1,4 +1,7 @@
 // ../js/requests.js
+// Displays request cards for the logged-in cook user.
+// This file loads incoming meal requests, allows approve/reject flow,
+// and updates request status in localStorage.
 
 function initRequests() {
 
@@ -8,9 +11,12 @@ function initRequests() {
 
     const requests = JSON.parse(localStorage.getItem("requests") || "[]");
 
-    const myRequests = requests.filter(r =>
-        normalizeUser(r.to) === normalizeUser(window.CURRENT_USER)
-    );
+    const myRequests = requests
+        .filter(r => normalizeUser(r.to) === normalizeUser(window.CURRENT_USER))
+        .sort((a, b) => {
+            const getKey = req => Number(req.ts || parseInt(String(req.id || "").replace(/\D/g, ""), 10) || 0);
+            return getKey(b) - getKey(a);
+        });
 
     if (myRequests.length === 0) {
         container.innerHTML = "<p>No requests yet.</p>";
@@ -31,7 +37,9 @@ function initRequests() {
             actionButtons.push(`<button class="approve-btn">Approve</button>`);
             actionButtons.push(`<button class="reject-btn">Reject</button>`);
         } else if (req.status === "sent") {
-            actionButtons.push(`<button class="delivered-btn">Mark Delivered</button>`);
+            actionButtons.push(`<button class="sent-status-btn" disabled style="opacity:0.6;cursor:not-allowed;">Waiting for customer pickup</button>`);
+        } else if (req.status === "delivered") {
+            actionButtons.push(`<button class="delivered-status-btn" disabled style="opacity:0.8;cursor:not-allowed;">✓ Delivered</button>`);
         }
 
         box.innerHTML = `
@@ -48,7 +56,6 @@ function initRequests() {
 
         const approveBtn = box.querySelector(".approve-btn");
         const rejectBtn = box.querySelector(".reject-btn");
-        const deliveredBtn = box.querySelector(".delivered-btn");
 
         if (approveBtn) {
             approveBtn.addEventListener("click", () => {
@@ -62,67 +69,122 @@ function initRequests() {
             });
         }
 
-        if (deliveredBtn) {
-            deliveredBtn.addEventListener("click", () => {
-                updateRequestStatus(req.id, "delivered");
-            });
-        }
-
         container.appendChild(box);
     });
 }
 
+// Update the stored request status and produce side effects like notifications,
+// meal quantity changes, and point adjustments.
 function updateRequestStatus(requestId, status) {
 
     let requests = JSON.parse(localStorage.getItem("requests") || "[]");
 
+    let updatedRequest = null;
+
     requests = requests.map(r => {
-
         if (r.id === requestId) {
-            r.status = status;
+            updatedRequest = { ...r, status };
+            if (status === "sent") {
+                updatedRequest.sent_ts = Date.now();
+            }
+            if (status === "delivered") {
+                updatedRequest.delivered_ts = Date.now();
+            }
+            if (status === "no-show") {
+                updatedRequest.noShow_ts = Date.now();
+            }
+            return updatedRequest;
         }
-
         return r;
     });
 
     localStorage.setItem("requests", JSON.stringify(requests));
 
-    const updated = requests.find(r => r.id === requestId);
-
-    if (updated) {
-
-        const notifications = JSON.parse(
-            localStorage.getItem("notifications") || "[]"
-        );
-
-        let message = `Your request for "${updated.mealTitle}" was ${status}.`;
-        if (status === "sent") {
-            message = `Your request for "${updated.mealTitle}" was accepted and is on the way.`;
-        } else if (status === "delivered") {
-            message = `Your request for "${updated.mealTitle}" was marked delivered.`;
-            addUserPoints(updated.to, 1);
-        }
-
-        notifications.push({
-            id: `note_${Date.now()}`,
-            type: "request-response",
-            requestId: updated.id,
-            mealId: updated.mealId,
-            mealTitle: updated.mealTitle,
-            from: window.CURRENT_USER,
-            to: updated.from,
-            message,
-            read: false,
-            ts: Date.now()
-        });
-
-        localStorage.setItem(
-            "notifications",
-            JSON.stringify(notifications)
-        );
+    if (!updatedRequest) {
+        initRequests();
+        return;
     }
 
+    const notifications = JSON.parse(
+        localStorage.getItem("notifications") || "[]"
+    );
+
+    if (status === "sent") {
+        let meals = JSON.parse(localStorage.getItem("meals") || "[]");
+        meals = meals.map(m => {
+            if (String(m.id) === String(updatedRequest.mealId)) {
+                m.quantity = Math.max(0, Number(m.quantity == null ? 1 : m.quantity) - 1);
+                if (m.quantity <= 0 && m.status !== "expired") {
+                    m.status = "received";
+                }
+            }
+            return m;
+        });
+        localStorage.setItem("meals", JSON.stringify(meals));
+    }
+
+    if (status === "rejected") {
+        if (updatedRequest.reservedPoints) {
+            addUserPoints(updatedRequest.from, 1);
+        }
+    }
+
+    if (status === "no-show") {
+        addUserPoints(updatedRequest.from, -1);
+        let meals = JSON.parse(localStorage.getItem("meals") || "[]");
+        meals = meals.map(m => {
+            if (String(m.id) === String(updatedRequest.mealId)) {
+                m.quantity = Number(m.quantity == null ? 1 : m.quantity) + 1;
+                if (m.quantity > 0 && m.status !== "expired") {
+                    m.status = "available";
+                }
+            }
+            return m;
+        });
+        localStorage.setItem("meals", JSON.stringify(meals));
+    }
+
+    let message = `Your request for "${updatedRequest.mealTitle}" was ${status}.`;
+    if (status === "sent") {
+        message = `The cook accepted your request for "${updatedRequest.mealTitle}". Please pick it up soon.`;
+    } else if (status === "rejected") {
+        message = `The cook rejected your request for "${updatedRequest.mealTitle}".`;
+    } else if (status === "delivered") {
+        message = `Your order for "${updatedRequest.mealTitle}" is complete. Thank you!`;
+        addUserPoints(updatedRequest.to, 1);
+    } else if (status === "no-show") {
+        message = `The cook marked your request for "${updatedRequest.mealTitle}" as no-show. -1 point penalty applied.`;
+    }
+
+    notifications.push({
+        id: `note_${Date.now()}`,
+        type: "request-response",
+        requestId: updatedRequest.id,
+        mealId: updatedRequest.mealId,
+        mealTitle: updatedRequest.mealTitle,
+        from: window.CURRENT_USER,
+        to: updatedRequest.from,
+        message,
+        read: false,
+        ts: Date.now()
+    });
+
+    localStorage.setItem(
+        "notifications",
+        JSON.stringify(notifications)
+    );
+
     updateNotificationBadge();
+
+    if (typeof showToast === "function") {
+        const statusMessages = {
+            sent: `Request accepted. ${updatedRequest.mealTitle} is waiting for pickup.`,
+            rejected: `Request rejected. ${updatedRequest.mealTitle} is now available again.`,
+            delivered: `Delivery confirmed for ${updatedRequest.mealTitle}.`,
+            "no-show": `No-show marked for ${updatedRequest.mealTitle}. Points updated.`
+        };
+        showToast(statusMessages[status] || `Request status updated: ${status}.`, status === "rejected" || status === "no-show" ? "warning" : "success");
+    }
 
     initRequests();
 }
@@ -132,6 +194,7 @@ function getQueryParam(name) {
     return params.get(name);
 }
 
+// Render the single request detail page from the notification ID in the URL.
 function initRequestPage() {
 
     const detail = document.getElementById("request-detail");

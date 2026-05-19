@@ -1,0 +1,111 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="UniBite ERD" id="unibite-erd-1">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- USER -->
+        <mxCell id="user" value="User&#10;---------------------&#10;PK user_id&#10;name_lastname&#10;email&#10;password_hash&#10;role (cook/consumer/admin)&#10;points&#10;created_at" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=26;rounded=0;strokeColor=#000000;fillColor=#dae8fc;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="80" width="220" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- LISTING -->
+        <mxCell id="listing" value="Listing&#10;---------------------&#10;PK listing_id&#10;FK cook_id (User)&#10;title&#10;description&#10;notes&#10;photo_url&#10;pickup_point&#10;pickup_time&#10;created_at&#10;expire_at&#10;portions_total&#10;portions_available&#10;status (active/inactive/expired)" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=26;rounded=0;strokeColor=#000000;fillColor=#ffe6cc;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="420" y="60" width="260" height="260" as="geometry"/>
+        </mxCell>
+
+        <!-- REQUEST -->
+        <mxCell id="request" value="Request&#10;---------------------&#10;PK request_id&#10;FK listing_id (Listing)&#10;FK consumer_id (User)&#10;status (pending/approved/rejected/received/no_show)&#10;created_at&#10;picked_up_at&#10;FK rating_id (Rating, UNIQUE)" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=26;rounded=0;strokeColor=#000000;fillColor=#fff2cc;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="760" y="80" width="280" height="220" as="geometry"/>
+        </mxCell>
+
+        <!-- RATING -->
+        <mxCell id="rating" value="Rating&#10;---------------------&#10;PK rating_id&#10;stars (1–5)&#10;title&#10;description&#10;created_at&#10;FK request_id (Request, UNIQUE)" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=26;rounded=0;strokeColor=#000000;fillColor=#e1d5e7;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1120" y="80" width="240" height="200" as="geometry"/>
+        </mxCell>
+
+        <!-- ALLERGEN -->
+        <mxCell id="allergen" value="Allergen&#10;---------------------&#10;PK allergen_id&#10;name" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=26;rounded=0;strokeColor=#000000;fillColor=#d5e8d4;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="460" y="380" width="200" height="120" as="geometry"/>
+        </mxCell>
+
+        <!-- ALLERGENLISTING -->
+        <mxCell id="allergenListing" value="AllergenListing&#10;---------------------&#10;PK (listing_id, allergen_id)&#10;FK listing_id (Listing)&#10;FK allergen_id (Allergen)" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=26;rounded=0;strokeColor=#000000;fillColor=#f8cecc;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="760" y="360" width="260" height="150" as="geometry"/>
+        </mxCell>
+
+        <!-- POINTSHISTORY -->
+        <mxCell id="pointsHistory" value="PointsHistory&#10;---------------------&#10;PK event_id&#10;FK user_id (User)&#10;change (+1 / -1)&#10;reason (rating_bonus/no_show/missing_rating/donation)&#10;created_at" style="shape=swimlane;childLayout=stackLayout;horizontal=1;startSize=26;rounded=0;strokeColor=#000000;fillColor=#f5f5f5;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="360" width="280" height="170" as="geometry"/>
+        </mxCell>
+
+        <!-- RELATIONSHIPS -->
+
+        <!-- User 1..N Listing -->
+        <mxCell id="rel_user_listing" edge="1" parent="1" style="endArrow=block;startArrow=oval;startFill=0;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="300" y="140" as="sourcePoint"/>
+            <mxPoint x="420" y="140" as="targetPoint"/>
+          </mxGeometry>
+          <mxCell source="user" target="listing"/>
+        </mxCell>
+
+        <!-- User 1..N Request (consumer) -->
+        <mxCell id="rel_user_request" edge="1" parent="1" style="endArrow=block;startArrow=oval;startFill=0;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="260" y="200" as="sourcePoint"/>
+            <mxPoint x="760" y="200" as="targetPoint"/>
+          </mxGeometry>
+          <mxCell source="user" target="request"/>
+        </mxCell>
+
+        <!-- User 1..N PointsHistory -->
+        <mxCell id="rel_user_points" edge="1" parent="1" style="endArrow=block;startArrow=oval;startFill=0;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="220" y="280" as="sourcePoint"/>
+            <mxPoint x="220" y="360" as="targetPoint"/>
+          </mxGeometry>
+          <mxCell source="user" target="pointsHistory"/>
+        </mxCell>
+
+        <!-- Listing 1..N Request -->
+        <mxCell id="rel_listing_request" edge="1" parent="1" style="endArrow=block;startArrow=oval;startFill=0;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="680" y="180" as="sourcePoint"/>
+            <mxPoint x="760" y="180" as="targetPoint"/>
+          </mxGeometry>
+          <mxCell source="listing" target="request"/>
+        </mxCell>
+
+        <!-- Request 1..1 Rating -->
+        <mxCell id="rel_request_rating" edge="1" parent="1" style="endArrow=block;startArrow=block;startFill=0;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1040" y="180" as="sourcePoint"/>
+            <mxPoint x="1120" y="180" as="targetPoint"/>
+          </mxGeometry>
+          <mxCell source="request" target="rating"/>
+        </mxCell>
+
+        <!-- Listing N..M Allergen via AllergenListing -->
+        <mxCell id="rel_listing_allergenListing" edge="1" parent="1" style="endArrow=block;startArrow=oval;startFill=0;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="550" y="260" as="sourcePoint"/>
+            <mxPoint x="820" y="360" as="targetPoint"/>
+          </mxGeometry>
+          <mxCell source="listing" target="allergenListing"/>
+        </mxCell>
+
+        <mxCell id="rel_allergen_allergenListing" edge="1" parent="1" style="endArrow=block;startArrow=oval;startFill=0;endFill=1;">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="560" y="440" as="sourcePoint"/>
+            <mxPoint x="820" y="440" as="targetPoint"/>
+          </mxGeometry>
+          <mxCell source="allergen" target="allergenListing"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
+

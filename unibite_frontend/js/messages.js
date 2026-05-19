@@ -1,4 +1,7 @@
 // ../js/messages.js
+// Manages the user messages page for UniBite.
+// It loads message notifications addressed to the current user, marks them read,
+// and allows the user to view or delete individual messages.
 
 function initMessages() {
     console.log("initMessages called", document.body.getAttribute("data-page"));
@@ -80,6 +83,7 @@ function initMessages() {
     if (typeof updateNotificationBadge === "function") updateNotificationBadge();
 }
 
+// Remove a message/notification by ID and update the stored list.
 function deleteNotification(id) {
     let notifications = JSON.parse(localStorage.getItem("notifications") || "[]");
     notifications = notifications.filter(n => n.id !== id);
@@ -87,6 +91,7 @@ function deleteNotification(id) {
     if (typeof updateNotificationBadge === "function") updateNotificationBadge();
 }
 
+// Navigate to the request detail page when the user clicks a message link.
 function openRequestPage(noteId) {
     window.location.href = `request.html?id=${encodeURIComponent(noteId)}`;
 }
