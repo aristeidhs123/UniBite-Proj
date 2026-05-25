@@ -1,0 +1,239 @@
+/* notifications.css - Requests list styling */
+
+.notification-box {
+    background: var(--listing-bg);
+    padding: 15px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    box-shadow: 0 -8px 24px rgba(0,0,0,0.06), 0 18px 40px rgba(0,0,0,0.10);
+    border-left: 4px solid var(--ubite-green);
+}
+
+.notification-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.status-badge.pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-badge.sent {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.status-badge.rejected {
+    background: #f8d7da;
+    color: #842029;
+}
+
+.status-badge.delivered {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.approve-btn,
+.reject-btn,
+.delivered-btn {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.approve-btn {
+    background: #4caf50;
+    color: white;
+}
+
+.approve-btn:hover {
+    background: #43a047;
+}
+
+.reject-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.reject-btn:hover {
+    background: #d84333;
+}
+
+.delivered-btn {
+    background: #2196F3;
+    color: white;
+}
+
+.delivered-btn:hover {
+    background: #1976D2;
+}
+
+
+.tabs-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.tab-btn {
+    flex: 1;
+    background: #f0f0f0;
+    border: 1px solid #d7d7d7;
+    border-radius: 8px;
+    padding: 10px 14px;
+    cursor: pointer;
+    font-weight: 700;
+    color: #333;
+    transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+
+.tab-btn.active,
+.tab-btn:hover,
+.tab-btn:focus {
+    background: var(--ubite-green);
+    color: white;
+    border-color: var(--ubite-green-dark);
+}
+
+.tab-btn:active {
+    filter: brightness(0.94);
+}
+
+.message-item {
+    border-left-color: #2196F3;
+}
+
+.message-text {
+    margin-top: 8px;
+    color: #444;
+}
+
+.tab-panel {
+    min-height: 180px;
+}
+
+.rating-btn {
+    background: #2196F3;
+    color: white;
+}
+
+.rating-btn:hover {
+    background: #1976D2;
+}
+
+.delivered-status-btn,
+.pending-btn,
+.sent-status-btn {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: not-allowed;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.delivered-status-btn {
+    background: #d1e7dd;
+    color: #0f5132;
+}
+
+.pending-btn {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.sent-status-btn {
+    background: #cfe2ff;
+    color: #084298;
+}
+
+.notifications-layout {
+    background: #b8d4c3;
+
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    margin-top: 20px;
+}
+
+.notifications-sidebar {
+    flex: 0 0 380px;
+    max-width: 380px;
+}
+
+.listing-detail {
+    flex: 1;
+    min-width: 320px;
+}
+
+#detail-content {
+    background: #fff;
+    padding: 18px;
+    border-radius: 10px;
+    /* stronger shadow with top offset so it visually surrounds the panel */
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.06), 0 18px 50px rgba(0,0,0,0.12);
+    min-height: 380px;
+}
+
+/* Make the left sidebar itself act like a card so both panels have matching shadows */
+.notifications-sidebar {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 10px;
+    box-shadow: 0 -10px 30px rgba(0,0,0,0.06), 0 18px 50px rgba(0,0,0,0.12);
+    border: 1px solid #f0f0f0;
+    box-sizing: border-box;
+}
+
+.notifications-sidebar .tab-panel {
+    max-height: calc(100vh - 320px);
+    overflow-y: auto;
+}
+
+.tab-panel {
+    max-height: calc(100vh - 240px);
+    overflow-y: auto;
+    padding-right: 6px;
+}
+
+@media (max-width: 1100px) {
+    .notifications-layout {
+        flex-direction: column;
+    }
+
+    .notifications-sidebar,
+    .listing-detail {
+        max-width: 100%;
+        flex: 1 1 auto;
+    }
+}
+
+@media (max-width: 600px) {
+    .tabs-container {
+        gap: 8px;
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    
+    .notification-box {
+        padding: 12px;
+    }
+}

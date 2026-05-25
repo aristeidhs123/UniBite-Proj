@@ -1,0 +1,99 @@
+/* --- REQUESTS PAGE (styled like PROFILE) --- */
+
+.container {
+    max-width: 500px;
+    margin: auto;
+}
+
+/* Header */
+.requests-header {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.requests-title {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 25px;
+    font-size: 30px;
+    font-weight: bold;
+}
+
+/* Wrapper for all requests */
+.requests-wrapper {
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+}
+
+/* Request box (same style as details-box) */
+.request-box {
+    background: #fff;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 15px;
+    text-align: left;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.request-box h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+}
+
+.request-box p {
+    margin: 4px 0;
+}
+
+/* Buttons (styled similar to profile buttons) */
+.req-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.approve-btn {
+    background: #4caf50;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.reject-btn {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.delivered-btn {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.delivered-btn:hover {
+    background: #1976D2;
+}
+
+.request-box p {
+    margin: 4px 0;
+    font-size: 14px;
+}
+
+.request-box h3 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+    font-weight: 600;
+}

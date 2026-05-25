@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Page: Login and signup form for UniBite users -->
+    <meta charset="UTF-8">
+    <title>Login - UniBite</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body data-page="login">
+
+<div class="container auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-header">
+            <div>
+                <p class="eyebrow">Welcome to UniBite</p>
+                <h2 class="auth-title">Login or create an account</h2>
+            </div>
+            <div class="auth-tabs">
+                <button id="tab-login" class="tab-btn active" type="button">Login</button>
+                <button id="tab-signup" class="tab-btn" type="button">Sign up</button>
+            </div>
+        </div>
+
+        <div class="info-banner">No backend needed — demo accounts are available. Use @cooknwave, @chefanna, or @foodie with password <strong>demo</strong>.</div>
+
+        <form id="login-form" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="@cooknwave" autocomplete="username">
+            </div>
+
+            <div class="form-group password-field-wrap">
+                <label for="password">Password</label>
+                <input type="password" id="password" autocomplete="current-password">
+                <button type="button" id="toggle-password" class="password-toggle" aria-label="Show or hide password">Show</button>
+            </div>
+
+            <div id="signup-extra" class="signup-extra hidden">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="you@example.com" autocomplete="email">
+                </div>
+
+                <div class="form-group password-field-wrap">
+                    <label for="confirm-password">Confirm password</label>
+                    <input type="password" id="confirm-password" autocomplete="new-password">
+                </div>
+            </div>
+
+            <button type="submit" id="submit-auth" class="primary-btn">Login</button>
+        </form>
+
+        <p class="auth-footnote">Switch tabs to sign up for a new account. Sign up stores your demo user locally and logs you in immediately.</p>
+    </div>
+</div>
+
+<script src="../js/mealService.js"></script>
+<script src="../js/main.js"></script>
+<script src="../js/login.js"></script>
+
+</body>
+</html>
