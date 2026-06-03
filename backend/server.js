@@ -360,8 +360,11 @@ app.get("/requests/cook/:cookId", async (req, res) => {
 
         l.listingID,
         l.title,
-        l.pickUp_point,
-        l.pickUp_time,
+
+        l.pickup_point AS pickUp_point,
+        l.pickup_time AS pickUp_time,
+        l.pickup_point AS pickUP_point,
+        l.pickup_time AS pickUP_time,
 
         u.userID AS consumer_id,
         u.name_lastname AS consumer_name,
