@@ -66,6 +66,62 @@ app.get("/listings", async (req, res) => {
   }
 });
 
+// εμφάνιση μίας συγκεκριμένης αγγελίας
+app.get("/listings/:id", async (req, res) => {
+  try {
+    const listingId = req.params.id;
+
+    const [rows] = await db.query(
+      `
+      SELECT
+        l.listingID AS id,
+        l.listingID,
+        l.title,
+        l.description,
+        l.description AS \`desc\`,
+        l.cook_id,
+        l.cook_id AS cookId,
+        u.name_lastname AS user,
+        l.portions_total,
+        l.portions_available,
+        l.portions_available AS quantity,
+        l.pickUP_point,
+        l.pickUP_point AS pickupLocation,
+        l.pickUP_point AS pickUp_point,
+        l.pickUP_point AS pickUP_point,
+        l.pickUP_time,
+        l.pickUP_time AS pickupTime,
+        l.pickUP_time AS pickUp_time,
+        l.pickUP_time AS pickUP_time,
+        l.status,
+        l.expires_at,
+        l.expires_at AS expiresAt,
+        l.created_at,
+        UNIX_TIMESTAMP(l.created_at) * 1000 AS ts
+      FROM listings l
+      JOIN users u ON l.cook_id = u.userID
+      WHERE l.listingID = ?
+        AND l.status != 'deleted'
+      `,
+      [listingId]
+    );
+
+    if (rows.length === 0) {
+      return res.status(404).json({
+        message: "Listing not found"
+      });
+    }
+
+    res.json(rows[0]);
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching listing"
+    });
+  }
+});
+
 // προσθήκη αγγελίας
 app.post("/listings", async (req, res) => {
   try {
@@ -73,8 +129,8 @@ app.post("/listings", async (req, res) => {
       cook_id,
       title,
       description,
-      pickup_point,
-      pickup_time,
+      pickUP_point,
+      pickUP_time,
       portions_total
     } = req.body;
 
@@ -97,8 +153,8 @@ app.post("/listings", async (req, res) => {
         cook_id,
         title,
         description,
-        pickup_point,
-        pickup_time,
+        pickUP_point,
+        pickUP_time,
         portions_total,
         portions_available,
         expires_at
@@ -109,8 +165,8 @@ app.post("/listings", async (req, res) => {
         cook_id,
         title,
         description,
-        pickup_point,
-        pickup_time,
+        pickUP_point,
+        pickUP_time,
         portions_total,
         portions_total
       ]
@@ -138,8 +194,8 @@ app.patch("/listings/:id", async (req, res) => {
       cook_id,
       title,
       description,
-      pickup_point,
-      pickup_time,
+      pickUP_point,
+      pickUP_time,
       portions_total
     } = req.body;
 
@@ -176,24 +232,25 @@ app.patch("/listings/:id", async (req, res) => {
 
     await db.query(
       `
-      UPDATE listings
+       UPDATE listings
       SET
         title = COALESCE(?, title),
         description = COALESCE(?, description),
-        pickup_point = COALESCE(?, pickup_point),
-        pickup_time = COALESCE(?, pickup_time),
+        pickUP_point = COALESCE(?, pickUP_point),
+        pickUP_time = COALESCE(?, pickUP_time),
         portions_total = COALESCE(?, portions_total)
       WHERE listingID = ?
       `,
       [
         title,
         description,
-        pickup_point,
-        pickup_time,
+        pickUP_point,
+        pickUP_time,
         portions_total,
         listingId
       ]
     );
+
 
     res.json({
       message: "Listing updated successfully"
@@ -237,7 +294,7 @@ app.delete("/listings/:id", async (req, res) => {
 
     const listing = listings[0];
 
-    if (listing.cook_id !== cook_id) {
+    if (Number(listing.cook_id) !== Number(cook_id))  {
       return res.status(403).json({
         message: "You can delete only your own listings"
       });
@@ -312,10 +369,35 @@ app.post("/requests", async (req, res) => {
         message: "Listing not found or expired"
       });
     }
+    
+    const listing = listings[0];
 
-    if (listings[0].portions_available <= 0) {
+    if (Number(listing.cook_id) === Number(consumer_id)) {
+      return res.status(400).json({
+        message: "You cannot request your own listing"
+       });
+    }
+
+    if (listing.portions_available <= 0) {
       return res.status(400).json({
         message: "No portions available"
+      });
+    }
+
+    const [existingRequests] = await db.query(
+    `
+    SELECT *
+    FROM requests
+    WHERE listing_id = ?
+    AND consumer_id = ?
+    AND status IN ('pending', 'approved')
+    `,
+    [listing_id, consumer_id]
+    );
+
+    if (existingRequests.length > 0) {
+      return res.status(400).json({
+        message: "You have already requested this listing"
       });
     }
 
@@ -361,10 +443,10 @@ app.get("/requests/cook/:cookId", async (req, res) => {
         l.listingID,
         l.title,
 
-        l.pickup_point AS pickUp_point,
-        l.pickup_time AS pickUp_time,
-        l.pickup_point AS pickUP_point,
-        l.pickup_time AS pickUP_time,
+        l.pickUP_point,
+        l.pickUP_time,
+        l.pickUP_point AS pickUp_point,
+        l.pickUP_time AS pickUp_time,
 
         u.userID AS consumer_id,
         u.name_lastname AS consumer_name,
@@ -562,6 +644,16 @@ app.patch("/requests/:id/picked-up", async (req, res) => {
       [requestId]
     );
 
+    // Αφαίρεση 1 πόντου από τον καταναλωτή
+    await db.query(
+    `
+    UPDATE users
+    SET points = GREATEST(points - 1, 0)
+    WHERE userID = ?
+    `,
+    [request.consumer_id]
+    );
+
     res.json({
       message: "Request marked as picked up successfully"
     });
@@ -635,9 +727,9 @@ app.patch("/requests/:id/no-show", async (req, res) => {
 // αξιολογηση γευματος
 app.post("/ratings", async (req, res) => {
   try {
-    const { request_id, stars, description } = req.body;
+    const { request_id, reviewer_id, stars, description } = req.body;
 
-    if (!request_id || !stars) {
+    if (!request_id || !reviewer_id || !stars) {
       return res.status(400).json({
         message: "Missing required fields"
       });
@@ -665,6 +757,12 @@ app.post("/ratings", async (req, res) => {
     }
 
     const request = requests[0];
+
+    if (Number(request.consumer_id) !== Number(reviewer_id)) {
+      return res.status(403).json({
+        message: "Only the consumer can rate this request"
+      });
+    }
 
     if (request.status !== "picked_up") {
       return res.status(400).json({
@@ -696,50 +794,47 @@ app.post("/ratings", async (req, res) => {
       )
       VALUES (?, ?, ?)
       `,
-      [request_id, stars, description]
+      [request_id, stars, description || null]
     );
 
-    // Βρίσκουμε τον μάγειρα της αγγελίας
-const [listingRows] = await db.query(
-  `
-  SELECT l.cook_id
-  FROM requests r
-  JOIN listings l ON r.listing_id = l.listingID
-  WHERE r.requestID = ?
-  `,
-  [request_id]
-);
+    const [listingRows] = await db.query(
+      `
+      SELECT l.cook_id
+      FROM requests r
+      JOIN listings l ON r.listing_id = l.listingID
+      WHERE r.requestID = ?
+      `,
+      [request_id]
+    );
 
-if (listingRows.length === 0) {
-  return res.status(404).json({
-    message: "Listing for this request not found"
-  });
-}
+    if (listingRows.length === 0) {
+      return res.status(404).json({
+        message: "Listing for this request not found"
+      });
+    }
 
-const cookId = listingRows[0].cook_id;
+    const cookId = listingRows[0].cook_id;
 
-// Υπολογισμός πόντων μάγειρα
-let pointsToAdd = 1;
+    let pointsToAdd = 1;
 
-if (stars > 3) {
-  pointsToAdd = 2;
-}
+    if (stars > 3) {
+      pointsToAdd = 2;
+    }
 
-// Προσθήκη πόντων στον μάγειρα
-await db.query(
-  `
-  UPDATE users
-  SET points = points + ?
-  WHERE userID = ?
-  `,
-  [pointsToAdd, cookId]
-);
+    await db.query(
+      `
+      UPDATE users
+      SET points = points + ?
+      WHERE userID = ?
+      `,
+      [pointsToAdd, cookId]
+    );
 
     res.status(201).json({
-  message: "Rating created successfully",
-  rating_id: result.insertId,
-  cook_points_added: pointsToAdd
-});
+      message: "Rating created successfully",
+      rating_id: result.insertId,
+      cook_points_added: pointsToAdd
+    });
 
   } catch (error) {
     console.error(error);
