@@ -82,3 +82,26 @@ RENAME TO allergens;
  foreign key (listing_id) references listing(listingID),
  foreign key (allergen_id) references allergen(allergenID)
  );
+ 
+ALTER TABLE users
+ADD COLUMN password_hash VARCHAR(255) NOT NULL;
+
+ALTER TABLE requests
+ADD COLUMN rating_penalty_applied TINYINT(1) NOT NULL DEFAULT 0;
+
+CREATE TABLE listing_allergens (
+  listing_id INT NOT NULL,
+  allergen_id INT NOT NULL,
+  PRIMARY KEY (listing_id, allergen_id),
+  FOREIGN KEY (listing_id) REFERENCES listings(listingID)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  FOREIGN KEY (allergen_id) REFERENCES allergens(allergenID)
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+ALTER TABLE users
+ADD COLUMN bio TEXT NULL,
+ADD COLUMN profile_image VARCHAR(255) NULL;
+
+ALTER TABLE listings
+ADD COLUMN image VARCHAR(255) NULL;
