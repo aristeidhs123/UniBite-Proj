@@ -178,13 +178,11 @@
             listing.pickupTime ||
             "";
 
-        // για πραγματικο χαρτη
-        // Αν το backend επιστρεφει pickup_lat και pickup_lng, το meal object
-        // θα μπορουσε να κραταει πραγματικες συντεταγμενες απο τη βαση:
-        // const backendCoords =
-        //     listing.pickup_lat !== null && listing.pickup_lng !== null
-        //         ? [Number(listing.pickup_lat), Number(listing.pickup_lng)]
-        //         : null;
+        
+         const backendCoords =
+            listing.pickup_lat !== null && listing.pickup_lng !== null
+                ? [Number(listing.pickup_lat), Number(listing.pickup_lng)]
+                 : null;
 
         return {
             id: id,
@@ -203,29 +201,29 @@
             user: listing.cook_name || listing.user || (listing.cook_id ? "Cook #" + listing.cook_id : "Unknown"),
             status: listing.status || "active",
             ts: listing.ts || createdAt,
-            expiresAt: listing.expires_at || listing.expiresAt || null
-            // για πραγματικο χαρτη
-            // coords: backendCoords
+            expiresAt: listing.expires_at || listing.expiresAt || null,
+            coords: backendCoords
         };
     }
 
     function mapMealToListing(meal, cookId) {
-        const pickupTime = normalizePickupTime(meal.pickupTime);
+    const pickupTime = normalizePickupTime(meal.pickupTime);
 
-        return {
-            cook_id: Number(cookId),
-            title: meal.title,
-            description: meal.desc,
-            pickup_point: meal.pickupLocation,
-            pickup_time: pickupTime,
-            pickUP_point: meal.pickupLocation,
-            pickUP_time: pickupTime,
-            portions_total: Number(meal.quantity || 1)
-            // για πραγματικο χαρτη
-            // pickup_lat: meal.coords?.[0] ?? null,
-            // pickup_lng: meal.coords?.[1] ?? null
-        };
-    }
+    return {
+        cook_id: Number(cookId),
+        title: meal.title,
+        description: meal.desc,
+        pickup_point: meal.pickupLocation,
+        pickup_time: pickupTime,
+        pickUP_point: meal.pickupLocation,
+        pickUP_time: pickupTime,
+        portions_total: Number(meal.quantity || 1),
+        allergens: meal.allergens || [],
+        pickup_lat: meal.coords?.[0] ?? null,
+        pickup_lng: meal.coords?.[1] ?? null,
+        image: meal.image || ""
+    };
+}
 
     function normalizePickupTime(value) {
         const text = String(value || "").trim();
