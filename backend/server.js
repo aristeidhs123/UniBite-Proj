@@ -621,6 +621,15 @@ app.post("/requests", async (req, res) => {
       `,
       [listing_id, consumer_id]
     );
+    
+    await createNotification({
+      user_id: listing.cook_id,
+      actor_id: consumer_id,
+      request_id: result.insertId,
+      listing_id: listing_id,
+      type: "request_created",
+      message: `New request for "${listing.title}"`
+    });
 
     res.status(201).json({
       message: "Request created",
@@ -780,6 +789,15 @@ app.patch("/requests/:id/approve", async (req, res) => {
       [requestId]
     );
 
+    await createNotification({
+      user_id: request.consumer_id,
+      actor_id: listing.cook_id,
+      request_id: requestId,
+      listing_id: request.listing_id,
+      type: "request_approved",
+      message: `Your request for "${listing.title}" was approved`
+    });
+
     await db.query(
       `
       UPDATE listings
@@ -836,6 +854,15 @@ app.patch("/requests/:id/reject", async (req, res) => {
       `,
       [requestId]
     );
+
+    await createNotification({
+      user_id: request.consumer_id,
+      actor_id: listing.cook_id,
+      request_id: requestId,
+      listing_id: request.listing_id,
+      type: "request_rejected",
+      message: `Your request was rejected`
+    });
 
     res.json({
       message: "Request rejected successfully"
@@ -898,6 +925,16 @@ app.patch("/requests/:id/picked-up", async (req, res) => {
     res.json({
       message: "Request marked as picked up successfully"
     });
+
+    await createNotification({
+      user_id: listing.cook_id,
+      actor_id: request.consumer_id,
+      request_id: requestId,
+      listing_id: request.listing_id,
+      type: "picked_up",
+      message: `Meal "${listing.title}" was marked as picked up`
+    });
+
   } catch (error) {
     console.error(error);
 
@@ -955,6 +992,16 @@ app.patch("/requests/:id/no-show", async (req, res) => {
     res.json({
       message: "Request marked as no-show and consumer lost 1 point"
     });
+
+    await createNotification({
+      user_id: request.consumer_id,
+      actor_id: listing.cook_id,
+      request_id: requestId,
+      listing_id: request.listing_id,
+      type: "no_show",
+      message: `You were marked as no-show and lost 1 point`
+    });
+
   } catch (error) {
     console.error(error);
 
@@ -1423,6 +1470,256 @@ app.post("/upload/listing-image", upload.single("image"), (req, res) => {
 
     res.status(500).json({
       message: "Error uploading image"
+    });
+  }
+});
+
+async function createNotification({
+  user_id,
+  actor_id = null,
+  request_id = null,
+  listing_id = null,
+  type,
+  message
+}) {
+  await db.query(
+    `
+    INSERT INTO notifications (
+      user_id,
+      actor_id,
+      request_id,
+      listing_id,
+      type,
+      message
+    )
+    VALUES (?, ?, ?, ?, ?, ?)
+    `,
+    [user_id, actor_id, request_id, listing_id, type, message]
+  );
+}
+
+app.get("/notifications/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const [rows] = await db.query(
+      `
+      SELECT
+        n.notificationID,
+        n.user_id,
+        n.actor_id,
+        actor.name_lastname AS actor_name,
+        n.request_id,
+        n.listing_id,
+        l.title AS listing_title,
+        n.type,
+        n.message,
+        n.is_read,
+        n.created_at
+      FROM notifications n
+      LEFT JOIN users actor ON n.actor_id = actor.userID
+      LEFT JOIN listings l ON n.listing_id = l.listingID
+      WHERE n.user_id = ?
+      ORDER BY n.created_at DESC
+      `,
+      [userId]
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching notifications"
+    });
+  }
+});
+
+app.patch("/notifications/:id/read", async (req, res) => {
+  try {
+    const notificationId = req.params.id;
+
+    await db.query(
+      `
+      UPDATE notifications
+      SET is_read = 1
+      WHERE notificationID = ?
+      `,
+      [notificationId]
+    );
+
+    res.json({
+      message: "Notification marked as read"
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error marking notification as read"
+    });
+  }
+});
+
+app.patch("/notifications/user/:userId/read-all", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    await db.query(
+      `
+      UPDATE notifications
+      SET is_read = 1
+      WHERE user_id = ?
+      `,
+      [userId]
+    );
+
+    res.json({
+      message: "All notifications marked as read"
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: "Error marking notifications as read"
+    });
+  }
+});
+
+app.post("/messages", async (req, res) => {
+  try {
+    const {
+      request_id,
+      sender_id,
+      receiver_id,
+      message
+    } = req.body;
+
+    if (!sender_id || !receiver_id || !message) {
+      return res.status(400).json({
+        message: "sender_id, receiver_id and message are required"
+      });
+    }
+
+    const [result] = await db.query(
+      `
+      INSERT INTO messages (
+        request_id,
+        sender_id,
+        receiver_id,
+        message
+      )
+      VALUES (?, ?, ?, ?)
+      `,
+      [
+        request_id || null,
+        sender_id,
+        receiver_id,
+        message
+      ]
+    );
+
+    res.status(201).json({
+      message: "Message sent successfully",
+      messageID: result.insertId
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error sending message"
+    });
+  }
+});
+
+app.get("/messages/user/:userId", async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const [rows] = await db.query(
+      `
+      SELECT
+        m.messageID,
+        m.request_id,
+        m.sender_id,
+        sender.name_lastname AS sender_name,
+        m.receiver_id,
+        receiver.name_lastname AS receiver_name,
+        m.message,
+        m.is_read,
+        m.created_at
+      FROM messages m
+      JOIN users sender ON m.sender_id = sender.userID
+      JOIN users receiver ON m.receiver_id = receiver.userID
+      WHERE m.sender_id = ?
+         OR m.receiver_id = ?
+      ORDER BY m.created_at DESC
+      `,
+      [userId, userId]
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error fetching messages"
+    });
+  }
+});
+
+app.get("/messages/request/:requestId", async (req, res) => {
+  try {
+    const requestId = req.params.requestId;
+
+    const [rows] = await db.query(
+      `
+      SELECT
+        m.messageID,
+        m.request_id,
+        m.sender_id,
+        sender.name_lastname AS sender_name,
+        m.receiver_id,
+        receiver.name_lastname AS receiver_name,
+        m.message,
+        m.is_read,
+        m.created_at
+      FROM messages m
+      JOIN users sender ON m.sender_id = sender.userID
+      JOIN users receiver ON m.receiver_id = receiver.userID
+      WHERE m.request_id = ?
+      ORDER BY m.created_at ASC
+      `,
+      [requestId]
+    );
+
+    res.json(rows);
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error fetching request messages"
+    });
+  }
+});
+
+app.patch("/messages/:id/read", async (req, res) => {
+  try {
+    const messageId = req.params.id;
+
+    await db.query(
+      `
+      UPDATE messages
+      SET is_read = 1
+      WHERE messageID = ?
+      `,
+      [messageId]
+    );
+
+    res.json({
+      message: "Message marked as read"
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Error marking message as read"
     });
   }
 });
